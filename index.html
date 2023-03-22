@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Click Counter with Timer</title>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+            background: linear-gradient(0deg, rgba(39,25,120,1) 0%, rgba(132,45,253,0.9921218487394958) 100%);
+            color: aliceblue;
+		}
+
+		button {
+			font-size: 24px;
+			padding: 12px 24px;
+			border-radius: 4px;
+			cursor: pointer;
+			margin-top: 24px;
+            background-color: rgba(218, 132, 255, 0.392);
+	}
+            
+		
+
+		.timer {
+			font-size: 48px;
+			margin-bottom: 24px;
+		}
+
+		.loader {
+			font-size: 48px;
+			margin-bottom: 24px;
+			color: rgb(255, 255, 255);
+            background-color: green;
+            width: 300px;
+            text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="loader" id="loader">3</div>
+	<div class="timer" id="timer">1:00</div>
+	<button id="countButton">Click me!</button>
+
+<script>
+    const countButton = document.getElementById("countButton");
+    let count = 0;
+    let timeLeft = 60;
+    let loaderCount = 3;
+    let timerStarted = false;
+    const loader = document.getElementById("loader");
+    const timer = document.getElementById("timer");
+
+    const loaderInterval = setInterval(() => {
+        if (loaderCount >= 1) {
+            loader.innerHTML = loaderCount;
+            loaderCount--;
+        } else {
+            clearInterval(loaderInterval);
+            loader.style.display = "none";
+            timer.style.display = "block";
+            startTimer();
+        }
+    }, 1000);
+
+    const startTimer = () => {
+        timerStarted = true; // set timerStarted to true
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) {
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? `0${seconds}` : seconds;
+                timer.innerHTML = `${minutes}:${seconds}`;
+            } else {
+                clearInterval(countdown);
+                timer.innerHTML = "Time's up!";
+                countButton.removeEventListener("click", handleClick);
+            }
+        }, 1000);
+    }
+
+    const handleClick = () => {
+        if (timerStarted) { // only increment count if timer has started
+            count++;
+            countButton.innerHTML = `Click me! (Clicked ${count} times)`;
+        }
+    }
+
+    countButton.addEventListener("click", handleClick);
+</script>
+
+</body>
+</html>
